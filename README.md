@@ -1,5 +1,4 @@
-# MUH Campus Map
-First version :
-GitHub\CampusMap\VirtualMap\code_ExistingMUH
+<meta http-equiv="refresh" content="0; url=index.html" />
+<p><a href="https://ziyingjiang.github.io/MAP_MUH/webmap3_MUH.html">Redirect</a></p>
 
 

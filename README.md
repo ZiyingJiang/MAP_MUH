@@ -1,4 +1,5 @@
-# MUHMap
-Collaborative project on mapping MUM and MUH
+# MUH Campus Map
+First version :
+GitHub\CampusMap\VirtualMap\code_ExistingMUH
 
-this is to experiment maintaining the project in GitHub
+

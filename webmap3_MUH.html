@@ -1,0 +1,395 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Miami University Hamilton Campus</title>
+    <!--<meta http-equiv="Content-Language" content="en-us" />  
+    <meta name="keywords" content="" />-->
+	<meta name="description" content="" />
+	<!--use different stylesheet in various size of viewport. need revise later -->
+	<link rel="stylesheet" type="text/css" href="main.css" media="screen,projection" />
+	<link rel="stylesheet" type="text/css" href="layout_pc_MUH.css" media="screen,projection" />
+	<link rel="stylesheet" type="text/css" media="screen and (min-width: 0px) and (max-width:480px)" href="layout_mobile.css" />
+	<link rel="stylesheet" type="text/css" media="screen and (min-width: 481px) and (max-width:768px)" href="layout_tablet.css" />
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+	<!--external stylesheet, may use in future 
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/themes/base/jquery-ui.css" type="text/css" />
+	<link rel="stylesheet" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/css" media="all" />
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.5.0/dojo/resources/dojo.css" type="text/css" media="all" />
+	<link rel="stylesheet" src="//ajax.googleapis.com/ajax/libs/dojo/1.5.0/dijit/themes/claro/claro.css" type="text/css" media="all" />
+	<link rel="stylesheet" src="//ajax.googleapis.com/ajax/libs/dojo/1.5.0/dijit/themes/tundra/tundra.css" type="text/css" media="all" />-->
+	
+	<!--call GoogleMap API -->
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA79T28GLr_8Asb_E8BlDmRpWQnMT-PAro&sensor=false"></script>
+	<!--Load jquery library for functions and user interface-->
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+
+	<script type="text/javascript">
+	var map;
+	var fcount=0;
+	
+	//make feature stylization a global function, as it will be called later when user click the legend
+	//the polygon/line color and width is determined by the 'properties' in the GeoJSON data 
+	function StyleFeature(feature) {
+		if (feature.getGeometry().getType() === 'Polygon'){
+			fill_color = feature.getProperty('fillcolor');//"#4DB8D8";
+			line_color = '#bebebe';//feature.getProperty('bordercolo');
+			stroke_weight = 1 //feature.getProperty('bordwidth') //the problem is that borderwith is used in parking while bordwidth is used in building
+		}
+		if (feature.getGeometry().getType() == 'LineString') {
+			stroke_weight =1;
+			line_color = '#fffafa';
+			if (feature.getProperty('Type')=='Trail'){
+				line_color = '#CC9900';//feature.getProperty('linecolor');//'#fffafa';
+			}
+			if (feature.getProperty('Type')=='Road'){
+				stroke_weight = 0;
+			}
+		}
+		var show= feature.getProperty('Display'); //the Display toggle the visibility of features. It is changed when user click the legend box.
+		return /** @type {google.maps.Data.StyleOptions}*/ ({
+			fillColor:fill_color,
+			fillOpacity:0.6,
+			strokeColor: line_color,
+			strokeWeight: stroke_weight,
+			visible: show
+		});
+	};
+
+	function initialize()
+	{
+		//base map style: remove the building and local roads, give lighter color of campus
+		var style=[
+		  {
+			"featureType": "road",
+			"elementType": "geometry",
+			"stylers": [
+			  { "visibility": "off" }
+			]
+		  },{
+			"elementType": "labels",
+			"stylers": [
+			  { "visibility": "off" }
+			]
+		  },{
+			"featureType": "landscape.man_made",
+			"elementType": "geometry.fill",
+			"stylers": [
+			  { "visibility": "off" }
+			]
+		  },{
+			"featureType": "poi.park",
+			"elementType": "labels",
+			"stylers": [
+			  { "visibility": "simplified" }
+			]
+		  },{
+			"featureType": "road.arterial",
+			"elementType": "geometry",
+			"stylers": [
+			  { "visibility": "simplified" }
+			]
+		  },{
+			"featureType": "road.arterial",
+			"elementType": "labels.text",
+			"stylers": [
+			  { "visibility": "simplified" }
+			]
+		  },{
+			"featureType": "road.local",
+			"elementType": "geometry",
+			"stylers": [
+			  { "visibility": "simplified" }
+			]
+		  },{
+			"featureType": "road.local",
+			"elementType": "labels",
+			"stylers": [
+			  { "visibility": "simplified" }
+			]
+		  },{
+			"featureType": "poi.school",
+			"stylers": [
+			  { "color": "#cddfad" }
+			]
+		  }
+		]
+		//var styledMap = new google.maps.StyledMapType(styles,{name: "Styled Map"});
+		//define the center, zoom level, and other option of base map
+		var myOptions = {
+	        center: new google.maps.LatLng(39.3770,-84.5630),
+	        zoom: 17, 
+	        panControl: false,
+	        streetViewControl: false,
+	        mapTypeControl:false,
+	        mapTypeId: google.maps.MapTypeId.ROADMAP,
+			};
+ 	    
+		//create a new google map in the map_canvas division on the webpage
+	    map = new google.maps.Map(document.getElementById('map_canvas'), myOptions);
+		map.setOptions({styles: style});
+		
+		// Load GeoJSON data
+		map.data.loadGeoJson('map_MUH.geojson');
+		//add more GeoJSON data. reserve the code below for future use
+		//map.data.addGeoJson('MUH_CampusDrive.geojson');
+		// set the style by calling the StyleFeature function defined early
+		//map.data.setStyle(StyleFeature); 
+		//map.data.loadGeoJson('MUH_Line.geojson');//map.data.setStyle(StyleFeature); 
+		// Style can also be set as below. But it is static, so we don't use this way 
+		/*var DefaultStyle = {
+			fillColor: 'green',
+			strokeColor: 'grey',
+			strokeWeight: 1,
+			visible:true,
+			}
+		map.data.setStyle(DefaultStyle);*/
+		map.data.setStyle(StyleFeature);  
+
+		// Load the properties of features when user click the feature on map
+		// by creating a listener on map.data so the map.data respond to click by running the function(event)
+		map.data.addListener('click', function(event) {
+			var output= "";  //the html code that display the properties
+			switch (event.feature.getProperty('Type')){
+				case "Building":
+					output= "<h3>" + event.feature.getProperty('Title') + "</h3>";				
+					if (event.feature.getProperty('pic_url')){
+						output=output+ "<img src='" + event.feature.getProperty('pic_url')+"' alt='Photo' width='200'>"
+					};
+					output= output+ "<p>" + event.feature.getProperty('descriptio') + "</p>";
+					if (event.feature.getProperty('WebSite')){
+						output=output+ "<a href='" + event.feature.getProperty('WebSite')+ "'target='_blank'>Click here</a><br>"
+					};
+					if (event.feature.getProperty('phone_numb')){
+						output=output+ "<p>Phone: " + event.feature.getProperty('phone_numb') + "</p>";
+					};
+					break;
+				case "Parking":
+					output= "<h3>"+ event.feature.getProperty('Type') +"</h3>";
+					output= output+"<p>Number of spot: "+ event.feature.getProperty('Number_Spo')+"</p>";
+					output= output+"<p>Staff parking: "+ event.feature.getProperty('Staff_Park')+"</p>";
+					output= output+"<p>Visitor parking: "+ event.feature.getProperty('Number_Vis')+"</p>";
+					output= output+"<p>Handicap access: "+ event.feature.getProperty('HNDC_ACCES')+"</p>";
+					break;
+				case "Sidewalk":
+					output= "<h3>"+ event.feature.getProperty('Type') +"</h3>";
+					output= output+"<p>Length in ft: "+ event.feature.getProperty('Shape_Leng')+"</p>";
+					output= output+"<p>Handicap access: "+ event.feature.getProperty('HNDC_ACCES')+"</p>";
+					break;
+				case "Pond":
+					output= "<h3>"+ event.feature.getProperty('Type') +"</h3>";
+					output= output+"<p>Square feet: "+ event.feature.getProperty('Shape_Area')+"</p>";
+					break;
+				case "Security":
+					output= "<h3>" + event.feature.getProperty('Title') + "</h3>";				
+					if (event.feature.getProperty('pic_url')){
+						output=output+ "<img src='" + event.feature.getProperty('pic_url')+"' alt='Photo' width='200'>"
+					};
+					output= output+ "<p>" + event.feature.getProperty('descriptio') + "</p>";
+					if (event.feature.getProperty('WebSite')){
+						output=output+ "<a href='" + event.feature.getProperty('WebSite')+ "'target='_blank'>Click here</a><br>"
+					};
+					if (event.feature.getProperty('phone_numb')){
+						output=output+ "<p>Phone: " + event.feature.getProperty('phone_numb') + "</p>";
+					};
+					break;
+				case "Road":
+					output= "<h3>"+ event.feature.getProperty('Type') +"</h3>";
+					output= output+"<p>Name: "+ event.feature.getProperty('LSN')+"</p>";
+					output= output+"<p>Speed limit: "+ event.feature.getProperty('SPEEDLIMIT')+"</p>";
+					output= output+"<p>Length in ft: "+ event.feature.getProperty('LENGTH3D')+"</p>";
+					break;
+				case "Trail":
+					output= "<h3>"+ event.feature.getProperty('Type') +"</h3>";
+					break;
+				default: //case "Office":
+					output= "<h3>" + event.feature.getProperty('Type') + "</h3>";				
+					if (event.feature.getProperty('pic_url')){
+						output=output+ "<img src='" + event.feature.getProperty('pic_url')+"' alt='Photo' width='200'>"
+					};
+					if (event.feature.getProperty('descriptio')){
+						output= output+ "<p>" + event.feature.getProperty('descriptio') + "</p>";
+					};
+					if (event.feature.getProperty('WebSite')){
+						output=output+ "<a href='" + event.feature.getProperty('WebSite')+ "'target='_blank'>Click here</a><br>"
+					};
+					if (event.feature.getProperty('phone_numb')){
+						output=output+ "<p>Phone: " + event.feature.getProperty('phone_numb') + "</p>";
+					};
+					//break;
+				//more cases will need to be added later
+				}
+			document.getElementById('info-box').innerHTML = output; //display the html code in the info-box 
+		});
+
+		// When the user hovers, tempt them to click by changing the style of the feature
+		// override the existing style with new fill and stroke settings 
+		// Also if mouse hovers on building, display building's name in the search box
+		map.data.addListener('mouseover', function(event) {
+			//if (event.feature.getGeometry().getType()!='LineString'){
+				document.getElementById('float-label').style.visibility = "visible";
+				if(event.feature.getProperty('Type')=='Building'){
+					document.getElementById('feature-label').innerHTML = event.feature.getProperty('Title')
+				}
+				else{
+					document.getElementById('feature-label').innerHTML = event.feature.getProperty('Type') 
+				};
+				map.data.overrideStyle(event.feature, {
+					icon: {				
+						path: google.maps.SymbolPath.CIRCLE,
+						scale: 8,
+						fillColor:'purple',
+						fillOpacity:1,
+						strokeColor:'purple',
+						strokeWeight: 3
+						},
+					fillColor:'yellow', 
+					fillOpacity: 0.8,
+					strokeColor:'yellow',
+					strokeWeight: 3
+					})
+			//}
+		});
+
+		// when the mouse leave the feature, call revertStyle() to remove all overrides. 
+		// also restore the 'Search map' in the search box
+		map.data.addListener('mouseout', function(event) {
+			map.data.revertStyle();
+			document.getElementById('float-label').style.visibility = "hidden";
+			//document.getElementById('txtKeyword').value ='Search map';		
+		});
+		
+		//Autocomplete the search, not working now, need to change 
+		/*AutoComplete();*/
+	}
+	
+	//execute the function of initialize after the window is loaded 
+	google.maps.event.addDomListener(window, 'load', initialize);
+
+	</script>
+</head>
+<body>
+	<div class="page" >
+    	<div class='header'>
+    		<h1>Hamilton Campus</h1>
+		</div>
+		<div class="main-content">
+			<div class="info-panel">
+				<div id="info-box">
+	<!--Need new pictures of Hamilton campus OR remove this picture cluster-->	
+				<h2>Miami University Hamilton Campus</h2>
+			
+<p>Miami University Hamilton is a regional campus of Miami University, a highly regarded public university with a national reputation. A commuter campus, Miami Hamilton offers bachelor's degrees, associate degrees, and beginning course work for most four-year degrees. </br>Miami University also offers one certificate program, <a href="http://miamioh.edu/cas/academics/departments/geography/">Geographic Information Science (GISci).</a></br>
+
+*Note: If you are considering enrolling in classes to work toward a certificate, please read the <a href="http://www.regionals.miamioh.edu/academics/documents/Miami-University-Certificate-Disclosure-Information.pdf/">Miami University Certificate Disclosure Information(PDF)</a>.</br>
+
+As one of Miami University's regional campuses, we maintain an open admission policy, which means first-time college students are automatically accepted with a high school diploma or GED, at any age. Learn more about our open admission policy.</br>
+
+</br>
+
+</p>				</div>
+			</div>
+			<div class="description" >
+				
+				<div id="map_canvas" >		
+				</div>
+				<div id= "float-label" style="visibility:hidden;"><span id="feature-label" ></div>
+				<div id="credit">
+					<p1>Map by Brandon Bruns, Farnaz Pakdel, Garry Green and Ziying Jiang, and is maintained by Ziying Jiang. <!--<b> Garry Green</b>, <b> Brandon Bruns</b> and <b> Farnaz Pakdel</b>-->  </p1> 
+				</div>
+				<div id="HelpTab"> 
+					<p class='tab'><a href="#" id="help-show" class="showLink" onclick="showHide('help');return false;">Show help</a></p>
+					<p class='tab'><a href="#" id="help-hide" class="hideLink" onclick="showHide('help');return false;" style="display:none">Hide help</a></p>
+					<div id="help" >
+						<fieldset >
+							<legend><p> Instruction</p></legend>
+								<ul>
+								<li>Zoom in and out with scrollbar on the left</li>
+								<li>Toggle basemaps with 'Map' and 'Satellite' buttons</li>
+								<li>Search for features with the 'Search Map' search bar</li>
+								<li>Click checkboxes above to display groups of features</li>
+								<li>Click on any feature to display additional information</li>
+							</ul>
+						</fieldset>
+					</div>
+				</div>				
+			</div>	
+			<div class="buttongroup">
+		  		<button id="btnRoadMap" title="toggle base maps" onclick="btnRoadMap_OnClick()">Map</button>
+		  		<button id="btnSateMap" title="toggle base maps" onclick="btnSateMap_OnClick()">Satellite</button>
+		  		<!-- merge two button for mobile device layout-->
+		  		<button id="btnBaseMap" title="toggle base maps" onclick="btnBaseMap_OnClick()">Satellite</button>
+				<!-- legend list for mobile device layout only--> 
+				<div class="dropdownlist">
+					<select id="legendlist2" onchange="DisplayFeatures2()">
+						<option value="ALL" selected>Display All</option>
+						<option value="Accessibility">Accessibility</option>
+						<option Value="Amenities" >Amenity</option>
+						<option value="Office" >Offices</option>
+						<option value="Recreation">Recreation</option>
+						<option Value="Security" >Security</option>
+						<option value="Student services" >Student service</option>
+						<option value="Sidewalks">Side walk</option>
+						<option value="Campus roads">Campus road</option>
+						<option Value="Building" >Building</option>
+						<option value="Parking" >Parking</option>
+						<option Value="Pond" >Pond</option>
+					</select>
+				</div>				
+				<input type="text" id="txtKeyword" value="Search Map" onfocus="if (this.value == 'Search Map') {this.value = '';}" size="20" >
+				<button id="btnQuery" title="Search" onclick="btnQuery_OnClick()" >Go</button>
+				<!--<button id="btnInstr" title="Instruction" onclick="btnInstr_OnClick()" >Show help</button>-->
+			</div>
+
+			<div class="content-pane">
+				<!-- legend list for pc and tablet layout--> 
+				<!-- <div class="content-title"><p> Displayed festures</p></div>-->
+				<fieldset>
+					<legend><div class="content-title"><h2> Displayed festures</h2></div></legend>
+					<div class="checkboxOne">
+						<input type="checkbox" name="legendlist" id="ALL" value="ALL" onclick="DisplayAllFeatures()" checked><label for='ALL'> All</label><br>
+						<input type="checkbox" name="legendlist" id="Accessibility" value="Accessibility" onclick="DisplayFeatures()" ><div class="circle blue"></div><label for='Accessibility'> Accessibility</label><br> 
+						<input type="checkbox" name="legendlist" id="Amenities" value="Amenities" onclick="DisplayFeatures()" ><div class="circle yellow"></div><label for='Amenities'> Amenity</label><br> 
+						<input type="checkbox" name="legendlist" id="Office" value="Office" onclick="DisplayFeatures()"  ><div class="circle brown"></div><label for="Office"> Office</label><br>  
+						<input type="checkbox" name="legendlist" id="Recreation" value="Recreation" onclick="DisplayFeatures()" ><div class="circle pink"></div><label for="Recreation"> Recreation</label><br>
+						<input type="checkbox" name="legendlist" id="Security" value="Security" onclick="DisplayFeatures()" ><div class="circle red"></div><label for="Security">  Security</label><br>
+						<input type="checkbox" name="legendlist" id="SServices" value="Student services" onclick="DisplayFeatures()" ><div class="circle green"></div><label for="SServices">  Student Service</label><br>
+						<input type="checkbox" name="legendlist" id="Trails" value="Trail" onclick="DisplayFeatures()" ><div class="line brown"></div><label for="Trails">  Trail</label><br>
+						<input type="checkbox" name="legendlist" id="Sidewalks" value="Sidewalk" onclick="DisplayFeatures()" ><div class="line white"></div><label for="Sidewalks">  Side walk</label><br>
+						<input type="checkbox" name="legendlist" id="CampusRoads" value="Road" onclick="DisplayFeatures()" ><div class="line white2"></div><label for="CampusRoads">  Campus road</label><br>
+						<input type="checkbox" name="legendlist" id="Building" value="Building" onclick="DisplayFeatures()" ><div class="rectangle building"></div><label for="Building">  Building</label><br> 									
+						<input type="checkbox" name="legendlist" id="Parking" value="Parking" onclick="DisplayFeatures()" ><div class="rectangle parking"></div><label for="Parking">  Parking</label><br>
+						<input type="checkbox" name="legendlist" id="Pond" value="Pond" onclick="DisplayFeatures()" ><div class="rectangle pond"></div><label for="Pond">  Pond</label><br>						
+					</div>
+				</fieldset>
+			</div>
+			<!-- <div id="instruction" style="display:none">
+				<fieldset >
+				<legend><p> Instruction</p></legend>
+				<ul>
+					<li>Zoom in and out with scrollbar on the left</li>
+					<li>Toggle basemaps with 'Map' and 'Satellite' buttons</li>
+					<li>Search for features with the 'Search Map' search bar</li>
+					<li>Click checkboxes above to display groups of features</li>
+					<li>Click on any feature to display additional information</li>
+				</ul>
+				</fieldset>
+			</div>-->
+		</div>
+
+		<div class='foot-nav'> 
+	        <a href="http://www.regionals.miamioh.edu/maps/campus-maps.htm">Back</a>
+			<a href="http://www.regionals.miamioh.edu/">Home</a>
+			<a href="mailto:MumOHGIS@gmail.com?Subject=Web map comments" target="_top">Questions and comments</a><br>
+			  <p>Miami University-Hamilton, 1601 University Blvd., Hamilton, OH 45011<BR>
+	          Phone: 513.785.300<br></p>  
+		</div>
+	</div> 
+	<script type="text/javascript" src='webmap3.js'></script>
+</body>
+</html>
+<!--edited by Garry Green 4/30/15 - edited MUM info to MUH info. Need to update line 300 - MUM feature story needs to be Hamilton. Update classes based on geojson file -->

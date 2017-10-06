@@ -1,0 +1,103 @@
+/* Layout Small Screens */
+body{background: #ffffff}
+.page{
+	max-width: 480px;
+	height: auto;
+}
+.header{  
+	background: #FFFFFF url(images/MURegional_banner.gif) no-repeat 0 -5px;
+	background-size: 198px 50px;
+  } 
+.header h1{
+	float:right;
+	font-size: 1.2em;
+	margin-right: 2px; 
+	padding: 0.5em 0em 0.5em 0em;
+}
+.info-panel{
+	width: 0%;
+	display: none;
+
+}
+.description{
+	margin-top: 28px;
+	width: 100%;
+}
+#map_canvas{
+	height: 380px;
+	margin-top:0px;
+}
+#credit{display:none}
+#btnRoadMap{display:none}
+#btnSateMap{display:none}
+.buttongroup{ 
+	display:inline;
+	position: absolute;
+	clear: both;
+	float: left;
+	background:#fff;
+	top: 0px;
+	width: auto;
+	left:2px;
+	margin:0em; 
+	padding: 0em; 
+	-webkit--radius: 0px 0 0px 0;
+	-moz--radius: 0px 0 0px 0;
+	border-radius: 0px 0 0px 0;
+	box-shadow: none;
+}
+#btnBaseMap{display:inline; float:left }
+#btnInstr{display:none}
+input[type="text"] {
+    width: 105px;
+}
+.dropdownlist{
+	display:inline;
+}
+.content-pane{
+    display:none;
+	padding: 0em 0.5em 0.5em 0.5em;
+	top: 50px;
+	width: 9em;
+	right: 5px;
+}
+.content-title{
+	display: none;
+}
+.content-pane h2 {	
+	font-size:0.8em;
+}	
+#instruction{
+	display:none;
+}
+.checkboxOne{
+	font-size: .9em;
+}
+.circle {
+    height: 6px;
+    width: 6px;
+}
+.line{
+    height: 2px;
+    width: 11px;
+}
+.rectangle{
+    height: 7px;
+    width: 11px;
+}
+
+.googft-info-window
+{
+	width: 200px;
+	height: auto;
+}
+.foot-nav{
+	border-top: 0px solid #484891;
+}
+.foot-nav p{display:none}
+.foot-nav a{color: #DB6D16; font-size:.9em} 
+
+
+@media screen and (max-width: 480px){
+	.foot-nav {padding-left:5px;}
+}

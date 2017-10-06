@@ -1,0 +1,188 @@
+/* Layout (global rules for all sizes) */
+/* Layout Large Screens (default for older browsers) */
+/*Scrolling image at header*/
+body{
+	background: #990000 url(images/page_background.jpg) repeat-x;
+}
+.page{
+	max-width: 1024px;
+	
+}
+.header{  background: #FFFFFF url(images/MURegional_banner.gif) no-repeat 0 0px;  overflow: hidden;} 
+.header h1{
+	float:right;
+	font-size: 3em;
+	margin: 0em .5em; 
+	padding: 0.5em 0em .5em 0em;
+}
+.info-panel{
+	width: 25%;/*370px*/;
+	height: 705px;
+
+}
+#info-box{
+	margin: 5px;
+	padding: 5px;
+	padding-top:0px;
+}
+.description{
+	width: 75%;/*auto;76%;
+	
+	max-width: 654px;*/
+	height: auto;
+	position: absolute;
+	/*left: 370px;*/
+	right:0px;
+	height: 100%;
+}
+#float-label{
+	display: inline-block;
+	position: absolute;
+	width: auto;
+	max-width: 180px;
+	margin-top:-695px;
+	margin-left: 35px;
+	padding: 0.5em;
+	-webkit--radius: 0px 10px 10px 10px;
+	-moz--radius: 0px 10px 10px 10px;
+	border-radius: 0px 10px 10px 10px;
+	box-shadow: 10px 10px 5px #888888;
+	background-color:rgba(255,255,255, 0.8);
+}
+#feature-label{
+	top: 10px;
+	left: 15px;	
+	font-size: 1.2em;
+	text-align: left;
+	
+}
+#map_canvas{
+	width: 100%;
+	height: 705px;
+
+}
+#credit{
+	width: 100%;
+	/*margin-top:-2.2em;*/
+	margin-top: -25px;
+	height: 15px;
+}
+.buttongroup{ 
+	position: absolute;
+	background:#990000;
+	-webkit--radius: 10px 0 10px 0;
+	-moz--radius: 10px 0 10px 0;
+	border-radius: 10px 0 10px 0;
+	display:inline-block;
+	top: 10px;
+	width: auto;
+	right: 15px;
+	margin:0em; 
+	padding: 0.5em; 
+	box-shadow: 10px 10px 5px #888888;
+}
+#btnBaseMap{display:none}
+fieldset {
+	margin: 5px 0 0 0;
+}
+.content-pane{
+	padding: 0em 0.5em 1em 0.5em;
+	top: 55px;
+	width: 12em;
+	right: 15px;
+	box-shadow: 10px 10px 5px #888888;
+}
+.content-title{
+	padding:0px 5px;
+	margin: 2px 0px;
+}
+.content-pane h2 {	
+	font-size:1.2em;
+}	
+
+.checkboxOne{
+	font-size: 1.2em;
+}
+.circle {
+    height: 7px;
+    width: 7px;
+}
+.line{
+    height: 2px;
+    width: 12px;	
+}
+.rectangle{
+    height: 8px;
+    width: 12px;
+}
+#HelpTab{
+	position: absolute;
+    top: 655px; 
+	width: auto;
+	margin:0em; 
+	padding: 5px;    
+	transition: top 2s;
+    -moz-transition: top 2s; /* Firefox 4 */
+    -webkit-transition: top 2s; /* Safari and Chrome */
+    -o-transition: top 2s; /* Opera */ 
+	}
+.tab{
+	display:inline-block;
+	background-color:rgba(219,200,200, 0.8); /*background color setting cannot apply on .showLink .hideLink class*/
+	-webkit--radius: 10px 10px 0px 0px;
+	-moz--radius: 10px 10px 0px 0px;
+	border-radius: 10px 10px 0px 0px;	
+}
+.showLink, .hideLink{
+	padding-left: 5px;
+	padding-right: 5px;
+	background-color:rgba(219,200,200, 0.8);
+	background:red;
+
+	display:inline-block;
+	width:auto;
+
+
+}
+#help{
+	margin-top: -15px;
+	padding: 0em 0.5em 0em 0.5em;
+	right: 15px;
+	height: 0px;
+    overflow: hidden;
+	transition: height 2s;
+    -moz-transition: height 2s; /* Firefox 4 */
+    -webkit-transition: height 2s; /* Safari and Chrome */
+    -o-transition: height 2s; /* Opera */ 
+}
+#help {
+	background-color:rgba(219,200,200, 0.8);
+	-webkit--radius: 0px 10px 10px 10px;
+	-moz--radius: 0px 10px 10px 10px;
+	border-radius: 0px 10px 10px 10px;
+	z-index:-1;
+	/*filter: dropshadow(color=#333, offx=5px, offy=5px);
+	box-shadow: 10px 10px 5px #888888;*/
+ }
+/*
+#instruction{
+	padding: 0em 0.5em 0.5em 0.5em;
+	top: 365px;
+	width: 12em;
+	right: 15px;
+}*/
+ul{
+	margin: 0;
+	margin-left: -2em;
+}
+.dropdownlist{display:none}
+.googft-info-window
+{
+	width: 200px;
+	height: auto;
+}
+.foot-nav{
+	border-top: 1px solid #484891;
+}
+.foot-nav a{color: #DB6D16; font-size:1.2em} 
+

@@ -1,0 +1,78 @@
+/* Layout Medium Screens */
+body{background: #ffffff}
+.page{
+	max-width: 768px;
+}
+.header{  background: #FFFFFF url(images/MURegional_banner.gif) no-repeat 0 -10px;  overflow: hidden;} 
+.header h1{
+	float:right;
+	font-size: 2em;
+	margin: 0em .5em; 
+	padding: 0.5em 0em .5em 0em;
+}
+#map_canvas{
+	height: 380px;
+}
+.buttongroup{ 
+	position: absolute;
+	background:#990000;
+	-webkit--radius: 10px 0 10px 0;
+	-moz--radius: 10px 0 10px 0;
+	border-radius: 10px 0 10px 0;
+	display:inline-block;
+	top: 10px;
+	width: auto;
+	right: 5px;
+	margin:0em; 
+	padding: 0.4em; 
+}
+#btnBaseMap{display:none}
+fieldset {
+	margin: 5px 0 5px 0;
+}
+.content-pane{
+	padding: 0em 0.5em 0.5em 0.5em;
+	top: 50px;
+	width: 12em;
+	right: 5px;
+}
+.content-title{
+	padding:0px 10px;
+	margin: 5px 0px;
+}
+.content-pane h2 {	
+	font-size:1em;
+}	
+.instruction{
+	display:none;
+}
+.checkboxOne{
+	font-size: 1em;
+}
+.circle {
+    height: 7px;
+    width: 7px;
+}
+.line{
+    height: 2px;
+    width: 12px;	
+}
+.rectangle{
+    height: 8px;
+    width: 12px;
+}
+.dropdownlist{display:none}
+.googft-info-window
+{
+	width: 200px;
+	height: auto;
+}
+.foot-nav{
+	border-top: 0px solid #484891;
+}
+.foot-nav a{color: #DB6D16; font-size:1em} 
+
+
+@media screen and (max-width: 780px){
+	.foot-nav {padding-left:5px;}
+}

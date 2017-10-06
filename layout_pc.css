@@ -1,0 +1,236 @@
+/* Layout (global rules for all sizes) */
+/* Layout Large Screens (default for older browsers) */
+/*Scrolling image at header*/
+body{
+	background: #990000 url(images/page_background.jpg) repeat-x;
+}
+.page{
+	max-width: 1024px;
+	
+}
+.back-to-top {display:none;}
+.header{ background: #FFFFFF url(images/MURegional_banner.gif) no-repeat 0 0px;  overflow: hidden;} 
+.header h1{
+	float:right;
+	font-size: 3em;
+	margin: 0em .5em; 
+	padding: 0.5em 0em .5em 0em;
+}
+.main-content{ 
+}
+.info-panel{
+	display: block;
+	width: 370px;
+	height: 725px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+#info-box{
+	margin: 5px;
+	padding: 5px;
+	padding-top:0px;
+}
+#info-box p2{
+	display: block;
+	margin-bottom: 0.5em;
+}
+#info-box img{
+	clear: both;
+	display: block;
+	margin-right:0.5em;
+}
+#info-box p{
+	clear: both;
+	float:left;
+}
+.description{
+	float:right;
+	width: auto;/*76%;*/	
+	max-width: 654px;*/
+	height: auto;
+	position: absolute;
+	left: 370px;
+	right:0px;
+}
+#map_canvas{
+	height: 725px;
+}
+#float-label{
+	display: inline-block;
+	position: absolute;
+	width: auto;
+	max-width: 180px;
+	margin-top:-715px;
+	margin-left: 35px;
+	padding: 0.5em;
+	-webkit--radius: 0px 10px 10px 10px;
+	-moz--radius: 0px 10px 10px 10px;
+	border-radius: 0px 10px 10px 10px;
+	box-shadow: 10px 10px 5px #888888;
+}
+#feature-label{
+	top: 10px;
+	left: 15px;	
+	font-size: 1.2em;
+	text-align: left;	
+}
+#credit{
+	display: inline-block;
+	position: absolute;
+	padding-bottom:5px;
+	padding-top: 5px;
+	/*padding-left: 0.3em;
+	padding-right: 0.3em;
+	margin-right: 0px;*/
+	width: 100%;
+	/*border:dashed;
+	margin-top:-2.2em;*/
+	margin-top: -28px;
+	height: 18px;	
+}
+#credit p1{
+	margin-left: 5px;
+	font-size: 0.9em; 	
+	line-height: 1.0em;
+	font-family:open sans;
+	text-align: left;
+}
+#HelpTab{
+	position: absolute;
+    top: 675px; 
+	width: auto;
+	margin:0em; 
+	padding: 5px;    
+	transition: top 2s;
+    -moz-transition: top 2s; /* Firefox 4 */
+    -webkit-transition: top 2s; /* Safari and Chrome */
+    -o-transition: top 2s; /* Opera */ 
+	}
+.tab{
+	display:inline-block;
+	background-color:rgba(219,200,200, 0.8); /*background color setting cannot apply on .showLink .hideLink class*/
+	-webkit--radius: 10px 10px 0px 0px;
+	-moz--radius: 10px 10px 0px 0px;
+	border-radius: 10px 10px 0px 0px;	
+}
+.showLink, .hideLink{
+	padding-left: 5px;
+	padding-right: 5px;
+	background-color:rgba(219,200,200, 0.8);
+	background:red;
+
+	display:inline-block;
+	width:auto;
+}
+#help{
+	margin-top: -15px;
+	padding: 0em 0.5em 0em 0.5em;
+	right: 15px;
+	height: 0px;
+    overflow: hidden;
+	transition: height 2s;
+    -moz-transition: height 2s; /* Firefox 4 */
+    -webkit-transition: height 2s; /* Safari and Chrome */
+    -o-transition: height 2s; /* Opera */ 
+	background-color:rgba(219,200,200, 0.8);
+	-webkit--radius: 0px 10px 10px 10px;
+	-moz--radius: 0px 10px 10px 10px;
+	border-radius: 0px 10px 10px 10px;
+	z-index:-1;
+	/*filter: dropshadow(color=#333, offx=5px, offy=5px);
+	box-shadow: 10px 10px 5px #888888;*/
+ }
+#story{
+	display:none;
+}
+.buttongroup{ 
+	position: absolute;
+	background:#990000;
+	-webkit--radius: 10px 0 10px 0;
+	-moz--radius: 10px 0 10px 0;
+	border-radius: 10px 0 10px 0;
+	display:inline-block;
+	top: 10px;
+	width: auto;
+	right: 15px;
+	margin:0em; 
+	padding: 0.5em; 
+	box-shadow: 10px 10px 5px #888888;
+}
+#btnRoadMap{display:none;}
+#btnSateMap{display:none; }
+#btnBaseMap{
+	/*margin-left: 5px;*/
+	padding: 0.1em;
+}
+#btnMyLocation{
+	padding: 0.1em;	
+}
+.dropdownlist{
+	display:none;
+}
+
+.content-pane{
+	position: absolute;
+	padding: 0em 0.5em 1em 0.5em;
+	top: 55px;
+	width: 12em;
+	right: 15px;
+	box-shadow: 10px 10px 5px #888888;
+}
+fieldset {
+	margin: 5px 0 0 0;
+}
+.content-title{
+	background-color: #990000;
+	-webkit--radius: 5px;
+	-moz--radius: 5px;
+	border-radius: 5px;
+	padding:0px 5px;
+	margin: 2px 0px;
+}
+.content-pane h2 {	
+	font-size:1.2em;
+}	
+
+.checkboxOne{
+	font-size: 1.2em;
+}
+.circle {
+    height: 7px;
+    width: 7px;
+}
+.line{
+    height: 2px;
+    width: 12px;	
+}
+.rectangle{
+    height: 8px;
+    width: 12px;
+}
+
+
+
+/*
+#instruction{
+	padding: 0em 0.5em 0.5em 0.5em;
+	top: 365px;
+	width: 12em;
+	right: 15px;
+}*/
+ul{
+	margin: 0;
+	margin-left: -2em;
+}
+.dropdownlist{display:none}
+.googft-info-window
+{
+	width: 200px;
+	height: auto;
+}
+.foot-nav{
+	border-top: 1px solid #EDECE6;
+	margin-bottom: 1px;
+}
+.foot-nav a{color: #DB6D16; font-size:1.2em} 
+

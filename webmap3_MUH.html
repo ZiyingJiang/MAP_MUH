@@ -4,13 +4,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Miami University Hamilton Campus</title>
-    <!--<meta http-equiv="Content-Language" content="en-us" />  
-    <meta name="keywords" content="" />-->
-	<meta name="description" content="" />
+    <!--<meta http-equiv="Content-Language" content="en-us" /> />--> 
+	<meta name="keywords" content="Miami University, Campus map, Regional, Hamilton" />
+	<meta name="description" content="Miami University Hamilton Campus Map" />
 	<!--use different stylesheet in various size of viewport. need revise later -->
 	<link rel="stylesheet" type="text/css" href="main.css" media="screen,projection" />
-	<link rel="stylesheet" type="text/css" href="layout_pc_MUH.css" media="screen,projection" />
-	<link rel="stylesheet" type="text/css" media="screen and (min-width: 0px) and (max-width:480px)" href="layout_mobile.css" />
+	<link rel="stylesheet" type="text/css" href="layout_pc.css" media="screen and (min-width: 769px)" />
+	<link rel="stylesheet" type="text/css" media="screen and (min-width: 0px) and (max-width:480px)" href="layout_mobile.css" /> 
 	<link rel="stylesheet" type="text/css" media="screen and (min-width: 481px) and (max-width:768px)" href="layout_tablet.css" />
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 	<!--external stylesheet, may use in future 
@@ -31,7 +31,10 @@
 	<script type="text/javascript">
 	var map;
 	var fcount=0;
-	
+	var Mcenter=new google.maps.LatLng(39.3770,-84.5630);
+	var Qcenter = new google.maps.LatLng;
+	var infowindow = new google.maps.InfoWindow();
+	var MyLoc= []; //declare my location as a global variable
 	//make feature stylization a global function, as it will be called later when user click the legend
 	//the polygon/line color and width is determined by the 'properties' in the GeoJSON data 
 	function StyleFeature(feature) {
@@ -122,7 +125,7 @@
 		//define the center, zoom level, and other option of base map
 		var myOptions = {
 	        center: new google.maps.LatLng(39.3770,-84.5630),
-	        zoom: 17, 
+			zoom: 15, 
 	        panControl: false,
 	        streetViewControl: false,
 	        mapTypeControl:false,
@@ -156,36 +159,42 @@
 			var output= "";  //the html code that display the properties
 			switch (event.feature.getProperty('Type')){
 				case "Building":
-					output= "<h3>" + event.feature.getProperty('Title') + "</h3>";				
-					if (event.feature.getProperty('pic_url')){
+					if ((event.feature.getProperty('Title')) && (event.feature.getProperty('Title')!='NULL')){
+						output= "<p2>" + event.feature.getProperty('Title') + "</p2>";
+					}else{
+						output= "<p2>" + event.feature.getProperty('Type') + "</p2>";
+					};
+					if ((event.feature.getProperty('pic_url')) && (event.feature.getProperty('pic_url')!='NULL')){
 						output=output+ "<img src='" + event.feature.getProperty('pic_url')+"' alt='Photo' width='200'>"
 					};
-					output= output+ "<p>" + event.feature.getProperty('descriptio') + "</p>";
-					if (event.feature.getProperty('WebSite')){
+					if ((event.feature.getProperty('descriptio')) && (event.feature.getProperty('descriptio')!='NULL')){
+						output= output+ "<p>" + event.feature.getProperty('descriptio') + "</p>";
+					}
+					if ((event.feature.getProperty('WebSite')) && (event.feature.getProperty('WebSite')!='NULL')){
 						output=output+ "<a href='" + event.feature.getProperty('WebSite')+ "'target='_blank'>Click here</a><br>"
 					};
-					if (event.feature.getProperty('phone_numb')){
+					if ((event.feature.getProperty('phone_numb')) && (event.feature.getProperty('phone_numb')!='NULL')){
 						output=output+ "<p>Phone: " + event.feature.getProperty('phone_numb') + "</p>";
 					};
 					break;
 				case "Parking":
-					output= "<h3>"+ event.feature.getProperty('Type') +"</h3>";
+					output= "<p2>"+ event.feature.getProperty('Type') +"</p2>";
 					output= output+"<p>Number of spot: "+ event.feature.getProperty('Number_Spo')+"</p>";
 					output= output+"<p>Staff parking: "+ event.feature.getProperty('Staff_Park')+"</p>";
 					output= output+"<p>Visitor parking: "+ event.feature.getProperty('Number_Vis')+"</p>";
 					output= output+"<p>Handicap access: "+ event.feature.getProperty('HNDC_ACCES')+"</p>";
 					break;
 				case "Sidewalk":
-					output= "<h3>"+ event.feature.getProperty('Type') +"</h3>";
+					output= "<p2>"+ event.feature.getProperty('Type') +"</p2>";
 					output= output+"<p>Length in ft: "+ event.feature.getProperty('Shape_Leng')+"</p>";
 					output= output+"<p>Handicap access: "+ event.feature.getProperty('HNDC_ACCES')+"</p>";
 					break;
 				case "Pond":
-					output= "<h3>"+ event.feature.getProperty('Type') +"</h3>";
+					output= "<p2>"+ event.feature.getProperty('Type') +"</p2>";
 					output= output+"<p>Square feet: "+ event.feature.getProperty('Shape_Area')+"</p>";
 					break;
 				case "Security":
-					output= "<h3>" + event.feature.getProperty('Title') + "</h3>";				
+					output= "<p2>" + event.feature.getProperty('Title') + "</p2>";				
 					if (event.feature.getProperty('pic_url')){
 						output=output+ "<img src='" + event.feature.getProperty('pic_url')+"' alt='Photo' width='200'>"
 					};
@@ -198,7 +207,7 @@
 					};
 					break;
 				case "Road":
-					output= "<h3>"+ event.feature.getProperty('Type') +"</h3>";
+					output= "<p2>"+ event.feature.getProperty('Type') +"</p2>";
 					output= output+"<p>Name: "+ event.feature.getProperty('LSN')+"</p>";
 					output= output+"<p>Speed limit: "+ event.feature.getProperty('SPEEDLIMIT')+"</p>";
 					output= output+"<p>Length in ft: "+ event.feature.getProperty('LENGTH3D')+"</p>";
@@ -207,17 +216,21 @@
 					output= "<h3>"+ event.feature.getProperty('Type') +"</h3>";
 					break;
 				default: //case "Office":
-					output= "<h3>" + event.feature.getProperty('Type') + "</h3>";				
-					if (event.feature.getProperty('pic_url')){
+					if ((event.feature.getProperty('Title')) && (event.feature.getProperty('Title')!='NULL')){
+						output= "<p2>" + event.feature.getProperty('Title') + "</p2>";
+					}else{
+						output= "<p2>" + event.feature.getProperty('Type') + "</p2>";
+					};				
+					if ((event.feature.getProperty('pic_url')) && (event.feature.getProperty('pic_url')!='NULL')){
 						output=output+ "<img src='" + event.feature.getProperty('pic_url')+"' alt='Photo' width='200'>"
 					};
-					if (event.feature.getProperty('descriptio')){
+					if ((event.feature.getProperty('descriptio')) && (event.feature.getProperty('descriptio')!='NULL')){
 						output= output+ "<p>" + event.feature.getProperty('descriptio') + "</p>";
 					};
-					if (event.feature.getProperty('WebSite')){
+					if ((event.feature.getProperty('WebSite')) && (event.feature.getProperty('WebSite')!='NULL')){
 						output=output+ "<a href='" + event.feature.getProperty('WebSite')+ "'target='_blank'>Click here</a><br>"
 					};
-					if (event.feature.getProperty('phone_numb')){
+					if ((event.feature.getProperty('phone_numb')) && (event.feature.getProperty('phone_numb')!='NULL')){
 						output=output+ "<p>Phone: " + event.feature.getProperty('phone_numb') + "</p>";
 					};
 					//break;
@@ -233,7 +246,11 @@
 			//if (event.feature.getGeometry().getType()!='LineString'){
 				document.getElementById('float-label').style.visibility = "visible";
 				if(event.feature.getProperty('Type')=='Building'){
-					document.getElementById('feature-label').innerHTML = event.feature.getProperty('Title')
+					if (event.feature.getProperty('Title')!="NULL"){
+						document.getElementById('feature-label').innerHTML=  event.feature.getProperty('Title') ;
+					}else{
+						document.getElementById('feature-label').innerHTML= event.feature.getProperty('Type') ;
+					}
 				}
 				else{
 					document.getElementById('feature-label').innerHTML = event.feature.getProperty('Type') 
@@ -274,32 +291,27 @@
 </head>
 <body>
 	<div class="page" >
-    	<div class='header'>
-    		<h1>Hamilton Campus</h1>
+    	<a href="#" class="back-to-top" title="Back to top"><img src="arrow-34.png" alt="back to top"></a>
+		<div class='header'>
+    		<h1>Hamilton</h1>
 		</div>
 		<div class="main-content">
 			<div class="info-panel">
 				<div id="info-box">
-	<!--Need new pictures of Hamilton campus OR remove this picture cluster-->	
-				<h2>Miami University Hamilton Campus</h2>
-			
-<p>Miami University Hamilton is a regional campus of Miami University, a highly regarded public university with a national reputation. A commuter campus, Miami Hamilton offers bachelor's degrees, associate degrees, and beginning course work for most four-year degrees. </br>Miami University also offers one certificate program, <a href="http://miamioh.edu/cas/academics/departments/geography/">Geographic Information Science (GISci).</a></br>
-
-*Note: If you are considering enrolling in classes to work toward a certificate, please read the <a href="http://www.regionals.miamioh.edu/academics/documents/Miami-University-Certificate-Disclosure-Information.pdf/">Miami University Certificate Disclosure Information(PDF)</a>.</br>
-
-As one of Miami University's regional campuses, we maintain an open admission policy, which means first-time college students are automatically accepted with a high school diploma or GED, at any age. Learn more about our open admission policy.</br>
-
-</br>
-
-</p>				</div>
+		<!--Need new pictures of Hamilton campus OR remove this picture cluster-->	
+					<h2>Miami University Hamilton Campus</h2>
+					<p>Miami University Hamilton is a regional campus of Miami University, a highly regarded public university with a national reputation. A commuter campus, Miami Hamilton offers bachelor's degrees, associate degrees, and beginning course work for most four-year degrees.</p>
+					<p>As one of Miami University's regional campuses, we maintain an open admission policy, which means first-time college students are automatically accepted with a high school diploma or GED, at any age. Learn more about our open admission policy.
+					</p>
+				</div>
 			</div>
 			<div class="description" >
-				
+		
 				<div id="map_canvas" >		
 				</div>
 				<div id= "float-label" style="visibility:hidden;"><span id="feature-label" ></div>
 				<div id="credit">
-					<p1>Map by Brandon Bruns, Farnaz Pakdel, Garry Green and Ziying Jiang, and is maintained by Ziying Jiang. <!--<b> Garry Green</b>, <b> Brandon Bruns</b> and <b> Farnaz Pakdel</b>-->  </p1> 
+					<p1>Map is created by Ziying Jiang, Garry Green, Brandon Bruns and Farnaz Pakdel.</p1> 
 				</div>
 				<div id="HelpTab"> 
 					<p class='tab'><a href="#" id="help-show" class="showLink" onclick="showHide('help');return false;">Show help</a></p>
@@ -307,78 +319,56 @@ As one of Miami University's regional campuses, we maintain an open admission po
 					<div id="help" >
 						<fieldset >
 							<legend><p> Instruction</p></legend>
-								<ul>
+							<ul>
 								<li>Zoom in and out with scrollbar on the left</li>
 								<li>Toggle basemaps with 'Map' and 'Satellite' buttons</li>
-								<li>Search for features with the 'Search Map' search bar</li>
+								<li>Search for features with the 'Search the map...' search bar</li>
 								<li>Click checkboxes above to display groups of features</li>
 								<li>Click on any feature to display additional information</li>
 							</ul>
 						</fieldset>
 					</div>
 				</div>				
-			</div>	
-			<div class="buttongroup">
-		  		<button id="btnRoadMap" title="toggle base maps" onclick="btnRoadMap_OnClick()">Map</button>
-		  		<button id="btnSateMap" title="toggle base maps" onclick="btnSateMap_OnClick()">Satellite</button>
-		  		<!-- merge two button for mobile device layout-->
-		  		<button id="btnBaseMap" title="toggle base maps" onclick="btnBaseMap_OnClick()">Satellite</button>
-				<!-- legend list for mobile device layout only--> 
-				<div class="dropdownlist">
-					<select id="legendlist2" onchange="DisplayFeatures2()">
-						<option value="ALL" selected>Display All</option>
-						<option value="Accessibility">Accessibility</option>
-						<option Value="Amenities" >Amenity</option>
-						<option value="Office" >Offices</option>
-						<option value="Recreation">Recreation</option>
-						<option Value="Security" >Security</option>
-						<option value="Student services" >Student service</option>
-						<option value="Sidewalks">Side walk</option>
-						<option value="Campus roads">Campus road</option>
-						<option Value="Building" >Building</option>
-						<option value="Parking" >Parking</option>
-						<option Value="Pond" >Pond</option>
-					</select>
-				</div>				
-				<input type="text" id="txtKeyword" value="Search Map" onfocus="if (this.value == 'Search Map') {this.value = '';}" size="20" >
-				<button id="btnQuery" title="Search" onclick="btnQuery_OnClick()" >Go</button>
-				<!--<button id="btnInstr" title="Instruction" onclick="btnInstr_OnClick()" >Show help</button>-->
-			</div>
+	
+				<div class="buttongroup">
+					<!--<button id="btnRoadMap" title="toggle base maps" onclick="btnRoadMap_OnClick()">Map</button>
+					<button id="btnSateMap" title="toggle base maps" onclick="btnSateMap_OnClick()">Satellite</button>
+					 merge two button for mobile device layout-->
+					<button id="btnMyLocation" title="toggole map center" onclick="btnMyLocation_OnClick()">My location</button>
+					<button id="btnBaseMap" title="toggle base maps" onclick="btnBaseMap_OnClick()">Satellite</button>
+					<!-- legend list for mobile device layout only--> 
+					<div class="dropdownlist">
+						<select id="legendlist2" multiple='multiple' onchange="DisplayFeatures2()">
+							<option value="ALL" >Display All</option>
+							<option value="Trails">Trail</option>
+							<option value="Sidewalks">Side walk</option>
+							<option Value="Building" >Building</option>
+							<option value="Parking" >Parking</option>
+							<option Value="Pond" >Pond</option>
+						</select>
+					</div>				
+					<input type="text" id="txtKeyword" value="Search the map..." onfocus="if (this.value == 'Search the map...') {this.value = '';}" size="20" >
+					<button id="btnQuery" title="Search" onclick="btnQuery_OnClick()" >Go</button>
+					<!--<button id="btnInstr" title="Instruction" onclick="btnInstr_OnClick()" >Show help</button>-->
+				</div>
+	
+				<div class="content-pane">
+					<!-- legend list for pc and tablet layout--> 
+					<!-- <div class="content-title"><p> Displayed features</p></div>-->
+					<fieldset>
+						<legend><div class="content-title"><h2> Displayed features</h2></div></legend>
+						<div class="checkboxOne">
+							<input type="checkbox" name="legendlist" id="ALL" value="ALL" onclick="DisplayAllFeatures()" checked><label for='ALL'> All</label><br>
+							<input type="checkbox" name="legendlist" id="Trails" value="Trail" onclick="DisplayFeatures()" ><div class="line brown"></div><label for="Trails">  Trail</label><br>
+							<input type="checkbox" name="legendlist" id="Sidewalks" value="Sidewalk" onclick="DisplayFeatures()" ><div class="line white"></div><label for="Sidewalks">  Side walk</label><br>
+							<input type="checkbox" name="legendlist" id="Building" value="Building" onclick="DisplayFeatures()" ><div class="rectangle building"></div><label for="Building">  Building</label><br> 									
+							<input type="checkbox" name="legendlist" id="Parking" value="Parking" onclick="DisplayFeatures()" ><div class="rectangle parking"></div><label for="Parking">  Parking</label><br>
+							<input type="checkbox" name="legendlist" id="Pond" value="Pond" onclick="DisplayFeatures()" ><div class="rectangle pond"></div><label for="Pond">  Pond</label><br>						
+						</div>
+					</fieldset>
+				</div>
 
-			<div class="content-pane">
-				<!-- legend list for pc and tablet layout--> 
-				<!-- <div class="content-title"><p> Displayed festures</p></div>-->
-				<fieldset>
-					<legend><div class="content-title"><h2> Displayed festures</h2></div></legend>
-					<div class="checkboxOne">
-						<input type="checkbox" name="legendlist" id="ALL" value="ALL" onclick="DisplayAllFeatures()" checked><label for='ALL'> All</label><br>
-						<input type="checkbox" name="legendlist" id="Accessibility" value="Accessibility" onclick="DisplayFeatures()" ><div class="circle blue"></div><label for='Accessibility'> Accessibility</label><br> 
-						<input type="checkbox" name="legendlist" id="Amenities" value="Amenities" onclick="DisplayFeatures()" ><div class="circle yellow"></div><label for='Amenities'> Amenity</label><br> 
-						<input type="checkbox" name="legendlist" id="Office" value="Office" onclick="DisplayFeatures()"  ><div class="circle brown"></div><label for="Office"> Office</label><br>  
-						<input type="checkbox" name="legendlist" id="Recreation" value="Recreation" onclick="DisplayFeatures()" ><div class="circle pink"></div><label for="Recreation"> Recreation</label><br>
-						<input type="checkbox" name="legendlist" id="Security" value="Security" onclick="DisplayFeatures()" ><div class="circle red"></div><label for="Security">  Security</label><br>
-						<input type="checkbox" name="legendlist" id="SServices" value="Student services" onclick="DisplayFeatures()" ><div class="circle green"></div><label for="SServices">  Student Service</label><br>
-						<input type="checkbox" name="legendlist" id="Trails" value="Trail" onclick="DisplayFeatures()" ><div class="line brown"></div><label for="Trails">  Trail</label><br>
-						<input type="checkbox" name="legendlist" id="Sidewalks" value="Sidewalk" onclick="DisplayFeatures()" ><div class="line white"></div><label for="Sidewalks">  Side walk</label><br>
-						<input type="checkbox" name="legendlist" id="CampusRoads" value="Road" onclick="DisplayFeatures()" ><div class="line white2"></div><label for="CampusRoads">  Campus road</label><br>
-						<input type="checkbox" name="legendlist" id="Building" value="Building" onclick="DisplayFeatures()" ><div class="rectangle building"></div><label for="Building">  Building</label><br> 									
-						<input type="checkbox" name="legendlist" id="Parking" value="Parking" onclick="DisplayFeatures()" ><div class="rectangle parking"></div><label for="Parking">  Parking</label><br>
-						<input type="checkbox" name="legendlist" id="Pond" value="Pond" onclick="DisplayFeatures()" ><div class="rectangle pond"></div><label for="Pond">  Pond</label><br>						
-					</div>
-				</fieldset>
 			</div>
-			<!-- <div id="instruction" style="display:none">
-				<fieldset >
-				<legend><p> Instruction</p></legend>
-				<ul>
-					<li>Zoom in and out with scrollbar on the left</li>
-					<li>Toggle basemaps with 'Map' and 'Satellite' buttons</li>
-					<li>Search for features with the 'Search Map' search bar</li>
-					<li>Click checkboxes above to display groups of features</li>
-					<li>Click on any feature to display additional information</li>
-				</ul>
-				</fieldset>
-			</div>-->
 		</div>
 
 		<div class='foot-nav'> 
@@ -386,7 +376,7 @@ As one of Miami University's regional campuses, we maintain an open admission po
 			<a href="http://www.regionals.miamioh.edu/">Home</a>
 			<a href="mailto:MumOHGIS@gmail.com?Subject=Web map comments" target="_top">Questions and comments</a><br>
 			  <p>Miami University-Hamilton, 1601 University Blvd., Hamilton, OH 45011<BR>
-	          Phone: 513.785.300<br></p>  
+	          Phone: 513.785.3000<br></p>  
 		</div>
 	</div> 
 	<script type="text/javascript" src='webmap3.js'></script>

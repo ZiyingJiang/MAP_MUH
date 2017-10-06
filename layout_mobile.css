@@ -1,58 +1,96 @@
 /* Layout Small Screens */
 body{background: #ffffff}
 .page{
+	width:100%;
 	max-width: 480px;
 	height: auto;
 }
+.back-to-top {display:none;}
 .header{  
 	background: #FFFFFF url(images/MURegional_banner.gif) no-repeat 0 -5px;
+	overflow: hidden;
 	background-size: 198px 50px;
   } 
 .header h1{
 	float:right;
 	font-size: 1.2em;
-	margin-right: 2px; 
-	padding: 0.5em 0em 0.5em 0em;
+	margin-right: 2px;
+	padding: 0.5em -0.5em 0.5em 0em;
+}
+.main-content{
 }
 .info-panel{
 	width: 0%;
 	display: none;
-
 }
+#info-box{display: none;}
+
 .description{
-	margin-top: 28px;
+	/*float: left;*/
+	position:relative;
+	top:30px;
+	margin-top: 0px;
 	width: 100%;
+	height: auto;
 }
 #map_canvas{
-	height: 380px;
+	height: 435px;
 	margin-top:0px;
 }
-#credit{display:none}
-#btnRoadMap{display:none}
-#btnSateMap{display:none}
-.buttongroup{ 
-	display:inline;
+#float-label{
+	display: inline-block;
 	position: absolute;
-	clear: both;
-	float: left;
-	background:#fff;
-	top: 0px;
 	width: auto;
-	left:2px;
-	margin:0em; 
-	padding: 0em; 
-	-webkit--radius: 0px 0 0px 0;
-	-moz--radius: 0px 0 0px 0;
-	border-radius: 0px 0 0px 0;
-	box-shadow: none;
+	/*max-width: 180px;*/
+	margin-top:-420px;
+	margin-left: 5px;
+	padding: 0.2em;
 }
-#btnBaseMap{display:inline; float:left }
-#btnInstr{display:none}
+#feature-lable{
+	top: 0px;
+	left: 5px;	
+	font-size: 1.0em;
+	text-align: left;
+}
+#credit{display:none}
+#HelpTab{display:none}
+
+.buttongroup{ 	
+	position: absolute;
+	background-color: #990000;
+	display:inline-block;
+	top: -30px;
+	width: 100%;
+	margin:0px; 
+	padding:  0.5em;
+
+}
+
+#btnRoadMap{display:none;}
+#btnSateMap{display:none; }
+#btnBaseMap{
+	/*margin-left: 5px;*/
+	padding: 0.1em;
+}
+#btnMyLocation{
+	padding: 0.1em;	
+}
+#btnQuery{display:none; }
+#btnInstr{display:none;}
 input[type="text"] {
-    width: 105px;
+    width: 100px;
+	/*float:left;*/
+	margin-left: 0px;
+	
+
 }
 .dropdownlist{
-	display:inline;
+	float:right;
+	margin-right: 5px;
+	font-size:1em;
+}
+option{
+	font-size:1em;
 }
 .content-pane{
     display:none;
@@ -64,9 +102,7 @@ input[type="text"] {
 .content-title{
 	display: none;
 }
-.content-pane h2 {	
-	font-size:0.8em;
-}	
+	
 #instruction{
 	display:none;
 }
@@ -92,10 +128,9 @@ input[type="text"] {
 	height: auto;
 }
 .foot-nav{
-	border-top: 0px solid #484891;
+	display:none;
 }
-.foot-nav p{display:none}
-.foot-nav a{color: #DB6D16; font-size:.9em} 
+
 
 
 @media screen and (max-width: 480px){

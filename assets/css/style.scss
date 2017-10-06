@@ -2,6 +2,162 @@
 ---
 
 @import "{{ site.theme }}";
+/* Global Content Formatting and Styles 
+ defines: color, font-size, size of buttons, legend components
+ not define: size, position*/
+body{
+	margin: 0 auto;
+	line-height: 1.5em;
+	font-size: 14px;
+	background: #990000;
+}
+.page{
+	margin:0 auto;
+	position: relative;	
+}
+p{margin: 0em 0em .75em 0em;}
+p2{
+	font-size:1.3em;
+	font-weight:bold;
+}
+
+.header{margin: 0; padding: 0; background:#FFFFFF;}
+.header h1{ 	
+	color: #990000;
+	font-weight: bold;
+}
+.main-content{ 
+	margin: 0;
+	padding: 0px 0px 0px 0px; 
+	width: 100%;
+	position: relative;
+}
+.info-panel{
+	float: left;
+	background:#FFFFCC;/*#EDECE6;*/
+	/*background-color:rgba(219,200,200, 0.9);*/
+	margin:0px;
+	padding: 0px;
+}
+#info-box{}
+
+.description{
+	background:#EDECE6;
+	display: block;
+	margin:0px;
+}
+#map_canvas{
+	margin: 0px 0px 0px 0px;
+	padding-right:  0px;
+}
+#float-label{
+	background-color:rgba(255,255,255, 0.8);
+}
+#credit{
+	background:#EDECE6;
+}
+
+/* size and position are set in layoutXX.css*/
+.buttongroup{ }
+
+.content-pane{
+	background-color:rgba(219,200,200, 0.8);
+	-webkit--radius: 10px;
+	-moz--radius: 10px;
+	border-radius: 10px;
+	filter: dropshadow(color=#333, offx=5px, offy=5px);
+}
+fieldset {
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+}
+.content-pane fieldset {
+	border: none;
+}
+
+.content-pane h2 {	
+	color:#E1D8B9;
+	font-weight:bold;
+}
+.circle {
+	display: inline-block;
+    border: 1px solid #000;
+    border-radius: 50%;
+	behavior: url(PIE.htc); /* remove if you don't care about IE8 */
+    height: 7px;
+    width: 7px;
+}
+.line{
+	display: inline-block;
+	behavior: url(PIE.htc); /* remove if you don't care about IE8 */
+    height: 2px;
+    width: 12px;	
+}
+.red {background: #D63333;}
+.yellow {background: #CCFF33;}
+.blue {background: #476CDA;}
+.pink{background: #FF66CC;}
+.brown{background: #CC9900}
+.green{background: #66FF33}
+.aqua{background: #00FF99}
+.white{background: #fffafa}
+.white2{background: #fffafa; border-top: 3px solid #fffafa; border-bottom: 3px solid #fffafa;}
+
+.rectangle{
+	display: inline-block;
+	border: 1px solid #333333;
+	behavior: url(PIE.htc); /* remove if you don't care about IE8 */
+    height: 8px;
+    width: 12px;
+}
+.building {background: #FF8080;}
+.parking {background: #A3A3C2;}
+.pond{background: #4DB8D8;}
+ul{
+	list-style-position:outside;
+	margin-left: -2em;
+}
+
+
+a.showLink, a.hideLink {
+    text-decoration: none;
+    background: transparent url('up.gif') no-repeat left; 
+}
+
+a.hideLink {
+    background: transparent url('down.gif') no-repeat left; 
+}
+.foot-nav{
+	clear: both;
+	margin-top: 1em;
+}
+.foot-nav a:hover{font-weight: bold;text-decoration: none;}
+
+.googft-info-window {
+	width: auto;
+	height: auto;
+	overflow-x:hidden;
+	overflow-y:auto;
+	font-size: 0.8em;
+	line-height: 1.5em;
+}
+.googft-info-window2 {
+	width: 200px;
+	height: auto;
+	overflow-x: hidden;
+	overflow-y:auto;
+	font-size: 1em;
+	line-height: 1.5em;
+}
+.googft-info-window.title {
+	color: red;
+}
+
+/*leave that for future effect*/
+
+
+
 /* Layout (global rules for all sizes) */
 /* Layout Large Screens (default for older browsers) */
 /*Scrolling image at header*/
